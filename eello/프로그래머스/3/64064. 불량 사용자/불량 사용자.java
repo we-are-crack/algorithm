@@ -2,48 +2,25 @@ import java.util.*;
 
 class Solution {
     
-    private String[] userId;
-    private String[] bannedId;
-    private Set<String> bannedSet;
-    
+    private Set<Integer> bannedSet;
     
     public int solution(String[] user_id, String[] banned_id) {
-        this.userId = user_id;
-        this.bannedId = banned_id;
-        this.bannedSet = new HashSet<>();
-        
-        return ban(0, new String[bannedId.length], new boolean[userId.length]);
+        bannedSet = new HashSet<>();
+        ban(user_id, banned_id, 0, 0);
+        return bannedSet.size();
     }
     
-    private int ban(int idx, String[] banList, boolean[] banned) {
-        if (idx == banList.length) {
-            String[] sortedBanList = Arrays.copyOf(banList, banList.length);
-            Arrays.sort(sortedBanList);
-            
-            StringBuilder sb = new StringBuilder();
-            for (String sbl : sortedBanList) {
-                sb.append(sbl);
-            }
-            
-            if (bannedSet.contains(sb.toString())) {
-                return 0;
-            } else {
-                bannedSet.add(sb.toString());
-                return 1;   
-            }
+    private void ban(String[] userId, String[] bannedId, int idx, int bitmask) {
+        if (bannedId.length == idx) {
+            bannedSet.add(bitmask);
+            return;
         }
         
-        int ret = 0;
         for (int i = 0; i < userId.length; i++) {
-            if (isCandidate(userId[i], bannedId[idx]) && !banned[i]) {
-                banList[idx] = userId[i];
-                banned[i] = true;
-                ret += ban(idx + 1, banList, banned);
-                banned[i] = false;
+            if ((bitmask & 1 << (i + 1)) == 0 && isCandidate(userId[i], bannedId[idx])) {
+                ban(userId, bannedId, idx + 1, bitmask | 1 << (i + 1));
             }
         }
-        
-        return ret;
     }
     
     private boolean isCandidate(String userId, String bannedId) {
