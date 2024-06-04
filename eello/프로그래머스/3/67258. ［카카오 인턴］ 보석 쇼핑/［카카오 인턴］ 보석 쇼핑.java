@@ -3,42 +3,37 @@ import java.util.*;
 class Solution {
     
     public int[] solution(String[] gems) {
-        Map<String, Integer> gemIdx = new HashMap<>();
-        int idx = 0;
+        Set<String> gemSet = new HashSet<>();
         for (String gem : gems) {
-            if (!gemIdx.containsKey(gem)) {
-                gemIdx.put(gem, idx++);
-            }
+            gemSet.add(gem);
         }
         
         int[] answer = {0, 100001};
-        int[] gemCount = new int[idx];
         
+        Map<String, Integer> gemCount = new HashMap<>();
+        gemCount.put(gems[0], 1);
         int left = 0, right = 0;
-        gemCount[gemIdx.get(gems[0])]++;
         while (left <= right && right < gems.length) {
-            if (includeAllGems(gemCount)) {
+            if (gemCount.size() == gemSet.size()) {
                 if (right - left < answer[1] - answer[0]) {
                     answer[0] = left + 1;
-                    answer[1] = right + 1;
+                    answer[1] = right + 1;    
                 }
                 
-                gemCount[gemIdx.get(gems[left++])]--;
+                int leftGemCount = gemCount.get(gems[left]);
+                if (leftGemCount == 1) {
+                    gemCount.remove(gems[left++]);
+                } else {
+                    gemCount.replace(gems[left++], leftGemCount - 1);
+                }
             } else {
-                ++right;
+                right++;
                 if (right < gems.length) {
-                    gemCount[gemIdx.get(gems[right])]++;
+                    gemCount.put(gems[right], gemCount.getOrDefault(gems[right], 0) + 1);
                 }
             }
         }
         
         return answer;
-    }
-    
-    private boolean includeAllGems(int[] gemCount) {
-        for (int count : gemCount) {
-            if (count == 0) return false;
-        }
-        return true;
     }
 }
