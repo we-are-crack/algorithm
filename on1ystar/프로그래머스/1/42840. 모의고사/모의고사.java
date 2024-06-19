@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 
 class Solution {
     public Object[] solution(int[] answers) {
@@ -13,7 +12,7 @@ class Solution {
             if(answers[i] == no2[i % no2.length]) students[1]++;
             if(answers[i] == no3[i % no3.length]) students[2]++;
         }
-        int maxAnswer = Arrays.stream(students).max().stream().findFirst().orElse(0);
+        int maxAnswer = Math.max(students[0], Math.max(students[1], students[2]));
         for(int i = 0; i < 3; i++) {
             if(maxAnswer == students[i])  answer.add(i+1);
         }
