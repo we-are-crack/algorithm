@@ -6,6 +6,7 @@ class Solution {
     private static final int[][] DIR = {{1, 0}, {0, -1}, {0, 1}, {-1, 0}};
     
     private int n, m, r, c, k;
+    private boolean[][][] visited;
     
     public String solution(int n, int m, int x, int y, int r, int c, int k) {
         this.n = n;
@@ -13,20 +14,22 @@ class Solution {
         this.r = r;
         this.c = c;
         this.k = k;
+        visited = new boolean[n + 1][m + 1][k + 1];
         
         String answer = dfs(x, y, k, new Stack<>());
         return answer == null ? "impossible" : answer;
     }
     
     private String dfs(int y, int x, int remain, Stack<Character> path) {
-        int needMinMoveCount = Math.abs(y - r) + Math.abs(x - c);
-        if (remain < needMinMoveCount || (remain - needMinMoveCount) % 2 == 1) {
-            return null;
-        }
-        
         if (remain == 0) {
             return y == r && x == c ? makePath(path) : null;
         }
+        
+        if (visited[y][x][remain]) {
+            return null;
+        }
+        
+        visited[y][x][remain] = true;
         
         for (int d = 0; d < DIR.length; d++) {
             int ny = y + DIR[d][0];
