@@ -14,9 +14,10 @@ class Solution {
         for(int courseSize : course) {
             HashMap<String, Integer> map = new HashMap<>();
             combination(new ArrayList<>(single), new boolean[single.size()], courseSize, new StringBuilder());
+            int cnt = 0;
             for(String courseCandidate : courseCandidates) {
-                int cnt = 0;
                 for(String order : orders) {
+                    if(order.length() < courseCandidate .length()) continue;
                     boolean isContain = true;
                     for(int i = 0; i < courseCandidate.length(); i++) {
                         if(!(order.contains(courseCandidate.charAt(i) + ""))) {
@@ -28,9 +29,10 @@ class Solution {
                 }
                 map.put(courseCandidate, cnt);
                 maxCourseCnt = Math.max(maxCourseCnt, cnt);
+                cnt = 0;
             }
-            map.forEach((courseCandidate, cnt) -> {
-                if(cnt == maxCourseCnt && maxCourseCnt >= 2) courseList.add(courseCandidate);
+            map.forEach((courseCandidate, count) -> {
+                if(count == maxCourseCnt && maxCourseCnt >= 2) courseList.add(courseCandidate);
             });
             maxCourseCnt = 0;
             courseCandidates.clear();
