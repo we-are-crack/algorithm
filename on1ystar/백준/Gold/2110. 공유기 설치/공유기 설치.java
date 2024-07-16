@@ -17,7 +17,7 @@ public class Main {
             return;
         }
         int start = 1;
-        int end = housePos.get(house - 1) / (wifi - 1);
+        int end = (housePos.get(house - 1) - housePos.get(0)) / (wifi - 1);
         int maxDistance = 0;
         while(start <= end) {
             int mid = (start + end) / 2;
