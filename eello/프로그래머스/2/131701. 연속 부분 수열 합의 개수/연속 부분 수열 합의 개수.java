@@ -12,8 +12,9 @@ class Solution {
         
         Set<Integer> set = new HashSet<>();
         for (int i = 1; i <= len; i++) {
-            for (int j = i - 1; j < acc.length; j++) {
-                set.add(j - i < 0 ? acc[j] : acc[j] - acc[j - i]);
+            set.add(acc[i - 1]);
+            for (int j = i; j < acc.length; j++) {
+                set.add(acc[j] - acc[j - i]);
             }
         }
         
