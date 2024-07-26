@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -22,6 +21,10 @@ public class Main {
             else
                 dp[i] = candidate;
         }
-        Arrays.stream(dp).max().ifPresent(System.out::println);
+        int answer = 0;
+        for(int i = 1; i <= days; i++) {
+            answer = Math.max(answer, dp[i]);
+        }
+        System.out.print(answer);
     }
 }
