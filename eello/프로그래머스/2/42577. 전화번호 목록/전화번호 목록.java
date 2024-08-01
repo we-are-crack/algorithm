@@ -3,17 +3,12 @@ import java.util.*;
 class Solution {
     
     public boolean solution(String[] phone_book) {
-        Arrays.sort(phone_book, (a, b) -> (a.length() - b.length()));
-        Set<String> prefix = new HashSet<>();
+        Arrays.sort(phone_book);
         
-        for (String phone : phone_book) {
-            for (int i = 1; i <= phone.length(); i++) {
-                if (prefix.contains(phone.substring(0, i))) {
-                    return false;
-                }
+        for (int i = 0; i < phone_book.length - 1; i++) {
+            if (phone_book[i + 1].startsWith(phone_book[i])) {
+                return false;
             }
-            
-            prefix.add(phone);
         }
         
         return true;
