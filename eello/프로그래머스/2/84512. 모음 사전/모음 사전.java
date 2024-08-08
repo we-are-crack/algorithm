@@ -2,7 +2,6 @@ class Solution {
     
     private static final int MAX_WORD_LENGTH = 5;
     private int answer, idx;
-    private boolean found;
     
     public int solution(String word) {
         dict(word, "");
