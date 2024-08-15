@@ -12,9 +12,9 @@ public class Main {
         int shortestPath = Integer.parseInt(line[2]);
         int start = Integer.parseInt(line[3]);
 
-        PriorityQueue pq = new PriorityQueue();
+        ArrayList<Integer> answer = new ArrayList<>();
         int[] distance = new int[300_001];
-        Queue<Integer> q = new ArrayDeque<>();
+        Queue<Integer> q = new LinkedList<>();
         ArrayList<ArrayList<Integer>> graph = new ArrayList<>(300_001);
         for(int i = 0; i < cities + 1; i++) graph.add(new ArrayList<>());
         for(int i = 0; i < roads; i++) {
@@ -29,12 +29,14 @@ public class Main {
                 if(distance[next] == 0 && next != start) {
                     q.offer(next);
                     distance[next] = distance[now] + 1;
-                    if(distance[next] == shortestPath) pq.offer(next);
+                    if(distance[next] == shortestPath) answer.add(next);
                 }
             }
         }
-        if(pq.size() == 0) System.out.println(-1);
-        while(!pq.isEmpty())
-            System.out.println(pq.poll());
+        if(answer.size() == 0) System.out.println(-1);
+        Collections.sort(answer);
+        for(int i = 0; i < answer.size(); i++) {
+            System.out.println(answer.get(i));
+        }
     }
  }
