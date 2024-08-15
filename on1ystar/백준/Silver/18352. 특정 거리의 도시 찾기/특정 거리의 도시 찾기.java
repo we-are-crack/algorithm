@@ -14,7 +14,7 @@ public class Main {
 
         PriorityQueue pq = new PriorityQueue();
         int[] distance = new int[300_001];
-        Queue<Integer> q = new LinkedList<>();
+        Queue<Integer> q = new ArrayDeque<>();
         ArrayList<ArrayList<Integer>> graph = new ArrayList<>(300_001);
         for(int i = 0; i < cities + 1; i++) graph.add(new ArrayList<>());
         for(int i = 0; i < roads; i++) {
