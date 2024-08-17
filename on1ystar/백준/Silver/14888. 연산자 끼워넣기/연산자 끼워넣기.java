@@ -32,12 +32,10 @@ public class Main {
             return;
         }
         for(int i = 0; i < 4; i++) {
-            for(int j = 0; j < ops[i]; j++) {
-                if(ops[i] != 0) {
-                    ops[i]--;
-                    dfs(calculate(n1, numbers[n2Index], i), n2Index + 1, cnt + 1);
-                    ops[i]++;
-                }
+            if(ops[i] != 0) {
+                ops[i]--;
+                dfs(calculate(n1, numbers[n2Index], i), n2Index + 1, cnt + 1);
+                ops[i]++;
             }
         }
     }
