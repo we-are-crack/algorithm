@@ -1,13 +1,10 @@
 class Solution {
         
     public int solution(int n) {
-        int p = 2, pp = 1;
+        if (n < 3) return n;
         
-        if (n == 1) return pp;
-        if (n == 2) return p;
-        
-        int count = 3;
         int mod = 1_000_000_007;
+        int p = 2, pp = 1, count = 3;
         while (count++ <= n) {
             p = p + pp;
             pp = p - pp;
