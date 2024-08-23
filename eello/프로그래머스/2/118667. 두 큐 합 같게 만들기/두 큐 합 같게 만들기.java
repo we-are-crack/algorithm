@@ -23,7 +23,7 @@ class Solution {
         
         int answer = 0;
         while (sum1 != sum2) {
-            if (answer > 2 * n + 1 || que1.isEmpty() || que2.isEmpty()) {
+            if (answer > 3 * n || que1.isEmpty() || que2.isEmpty()) {
                 return -1;
             }
             
