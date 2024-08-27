@@ -1,39 +1,26 @@
+import java.util.*;
+
 class Solution {
     
     public String solution(String number, int k) {
-        boolean[] deleted = new boolean[number.length()];
-        
-        int left = 0, right = 1;
-        while (right < number.length() && k > 0) {
-            while (
-                right < number.length()
-                && right - left < k
-                && number.charAt(left) >= number.charAt(right)) {
-                right++;
+        Stack<Character> stack = new Stack();
+        for (int i = 0; i < number.length(); i++) {            
+            char ch = number.charAt(i);
+            while (k > 0 && !stack.isEmpty() && stack.peek() < ch) {
+                stack.pop();
+                k--;
             }
-
-            if (right < number.length() && number.charAt(left) < number.charAt(right)) {
-                for (int i = left; i < right; i++) {
-                    deleted[i] = true;
-                }
-                
-                k -= (right - left);
-                left = right;
-                right++;
-            } else {
-                left++;
-                right = left + 1;
-            }
+            
+            stack.push(ch);
         }
         
-        for (int i = 0; i < k; i++) {
-            deleted[number.length() - 1 - i] = true;
+        while (k-- > 0) {
+            stack.pop();
         }
         
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < number.length(); i++) {
-            if (deleted[i]) continue;
-            sb.append(number.charAt(i));
+        for (char ch : stack) {
+            sb.append(ch);
         }
         
         return sb.toString();
