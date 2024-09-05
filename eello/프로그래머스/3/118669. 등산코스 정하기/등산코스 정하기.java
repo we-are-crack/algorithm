@@ -41,9 +41,7 @@ class Solution {
             }
             
             if (isSummit[curNode]) {
-                if (curIntensity < answer[1]) {
-                    answer = current;
-                } else if (curNode < answer[0]) {
+                if (curIntensity < answer[1] || curNode < answer[0]) {
                     answer = current;
                 }
                 
