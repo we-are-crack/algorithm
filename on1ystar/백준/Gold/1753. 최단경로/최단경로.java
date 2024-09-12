@@ -28,6 +28,8 @@ public class Main {
         pq.offer(new int[] {start, 0});
         while (!pq.isEmpty()) {
             int[] nowVertexAndWeight = pq.poll();
+            
+            if (minWeight[nowVertexAndWeight[0]] < nowVertexAndWeight[1]) { continue; }
 
             for (int[] edge : edges.get(nowVertexAndWeight[0])) {
                 int nextVertex = edge[0];
