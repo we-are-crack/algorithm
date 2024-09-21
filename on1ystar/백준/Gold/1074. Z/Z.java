@@ -5,7 +5,6 @@ import java.util.*;
 
 public class Main {
 
-    private static int[][] z = {{0, 1}, {2, 3}};
     private static int r;
     private static int c;
 
