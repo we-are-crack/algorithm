@@ -18,8 +18,7 @@ public class Main {
         int[][] box = new int[n][m];
 
         int unripeTomatoCount = 0;
-        List<Queue<int[]>> ripeTomatoes = new ArrayList<>();
-        ripeTomatoes.add(new LinkedList<>());
+        Queue<int[]> ripeTomatoes = new LinkedList<>();
 
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
@@ -28,7 +27,7 @@ public class Main {
                 int tomato = Integer.parseInt(st.nextToken());
 
                 if (tomato == 1) {
-                    ripeTomatoes.get(0).add(new int[]{i, j});
+                    ripeTomatoes.add(new int[]{i, j});
                 } else if (tomato == 0) {
                     unripeTomatoCount++;
                 }
@@ -37,11 +36,11 @@ public class Main {
             }
         }
 
-        int days = ripeTomatoes.size() - 1;
-        while (!ripeTomatoes.get(days).isEmpty()) {
-            ripeTomatoes.add(new LinkedList<>(pastOneDay(ripeTomatoes.get(days), box)));
+        int days = 0;
+        while (!ripeTomatoes.isEmpty()) {
+            ripeTomatoes = pastOneDay(ripeTomatoes, box);
             days++;
-            unripeTomatoCount -= ripeTomatoes.get(days).size();
+            unripeTomatoCount -= ripeTomatoes.size();
         }
 
         if (unripeTomatoCount == 0) {
