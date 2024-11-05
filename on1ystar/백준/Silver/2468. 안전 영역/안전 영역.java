@@ -8,6 +8,7 @@ public class Main {
     private static final int[] dr = new int[]{1, 0, -1, 0};
     private static final int[] dc = new int[]{0, 1, 0, -1};
     private static int n;
+    private static int max = 0;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -23,13 +24,14 @@ public class Main {
                 int num = Integer.parseInt(st.nextToken());
                 map[i][j] = num;
                 heights[num]++;
+                max = Math.max(max, num);
             }
         }
 
         int answer = 1;
         int remainingSpace = n * n;
 
-        for (int height = 1; height < 101; height++) {
+        for (int height = 1; height < max; height++) {
             if (heights[height] == 0) { continue; }
             if (remainingSpace <= answer) { break; }
 
@@ -38,15 +40,10 @@ public class Main {
 
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
-                    if (!visited[i][j] && map[i][j] != 0) {
-                        if (map[i][j] <= height) {
-                            map[i][j] = 0;
-                            submerge(i, j, height, map, visited);
-                        } else {
-                            visited[i][j] = true;
-                            safe(i, j, height, map, visited);
-                            safeZone++;
-                        }
+                    if (!visited[i][j] && map[i][j] > height) {
+                        visited[i][j] = true;
+                        bfs(i, j, height, map, visited);
+                        safeZone++;
                     }
                 }
             }
@@ -58,15 +55,7 @@ public class Main {
         System.out.println(answer);
     }
 
-    private static void safe(int r, int c, int height, int[][] map, boolean[][] visited) {
-        bfs(r, c, height, map, visited, true);
-    }
-
-    private static void submerge(int r, int c, int height, int[][] map, boolean[][] visited) {
-        bfs(r, c, height, map, visited, false);
-    }
-
-    private static void bfs(int r, int c, int height, int[][] map, boolean[][] visited, boolean isSafe) {
+    private static void bfs(int r, int c, int height, int[][] map, boolean[][] visited) {
         Deque<int[]> q = new ArrayDeque<>();
         q.offer(new int[]{r, c});
         while (!q.isEmpty()) {
@@ -76,14 +65,9 @@ public class Main {
                 int nr = pos[0] + dr[i];
                 int nc = pos[1] + dc[i];
 
-                if (valid(nr, nc) && !visited[nr][nc] && map[nr][nc] != 0) {
-                    if (!isSafe && map[nr][nc] <= height) {
-                        map[nr][nc] = 0;
-                        q.offer(new int[]{nr, nc});
-                    } else if (isSafe && map[nr][nc] > height) {
-                        visited[nr][nc] = true;
-                        q.offer(new int[]{nr, nc});
-                    }
+                if (valid(nr, nc) && !visited[nr][nc] && map[nr][nc] > height) {
+                    visited[nr][nc] = true;
+                    q.offer(new int[]{nr, nc});
                 }
             }
         }
