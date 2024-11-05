@@ -42,7 +42,7 @@ public class Main {
                 for (int j = 0; j < n; j++) {
                     if (!visited[i][j] && map[i][j] > height) {
                         visited[i][j] = true;
-                        bfs(i, j, height, map, visited);
+                        dfs(i, j, height, map, visited);
                         safeZone++;
                     }
                 }
@@ -55,20 +55,14 @@ public class Main {
         System.out.println(answer);
     }
 
-    private static void bfs(int r, int c, int height, int[][] map, boolean[][] visited) {
-        Deque<int[]> q = new ArrayDeque<>();
-        q.offer(new int[]{r, c});
-        while (!q.isEmpty()) {
-            int[] pos = q.poll();
+    private static void dfs(int r, int c, int height, int[][] map, boolean[][] visited) {
+        for (int i = 0; i < 4; i++) {
+            int nr = r + dr[i];
+            int nc = c + dc[i];
 
-            for (int i = 0; i < 4; i++) {
-                int nr = pos[0] + dr[i];
-                int nc = pos[1] + dc[i];
-
-                if (valid(nr, nc) && !visited[nr][nc] && map[nr][nc] > height) {
-                    visited[nr][nc] = true;
-                    q.offer(new int[]{nr, nc});
-                }
+            if (valid(nr, nc) && !visited[nr][nc] && map[nr][nc] > height) {
+                visited[nr][nc] = true;
+                dfs(nr, nc, height, map, visited);
             }
         }
     }
