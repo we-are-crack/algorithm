@@ -13,12 +13,10 @@ public class Main {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        // 배열 정렬
         Arrays.sort(arr);
         int answer = 0;
 
         for (int i = 0; i < n; i++) {
-            // 투 포인터 사용
             int left = 0;
             int right = n - 1;
 
