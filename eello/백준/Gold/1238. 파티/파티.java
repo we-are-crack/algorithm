@@ -3,8 +3,6 @@ import java.util.*;
 
 public class Main {
 
-    private static List<int[]>[] adj;
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -13,9 +11,12 @@ public class Main {
         int m = Integer.parseInt(st.nextToken());
         int x = Integer.parseInt(st.nextToken());
 
-        adj = new List[n + 1];
+        List<int[]>[] adj = new List[n + 1];
+        List<int[]>[] reverseAdj = new List[n + 1];
+
         for (int i = 1; i <= n; i++) {
             adj[i] = new ArrayList<>();
+            reverseAdj[i] = new ArrayList<>();
         }
 
         for (int i = 0; i < m; i++) {
@@ -25,17 +26,11 @@ public class Main {
             int t = Integer.parseInt(st.nextToken());
 
             adj[s].add(new int[]{e, t});
+            reverseAdj[e].add(new int[]{s, t});
         }
 
-        int[] x2Home = pointToAll(n, x);
-        int[] home2X = new int[n + 1];
-        for (int i = 1; i <= n; i++) {
-            if (i == x) {
-                continue;
-            }
-
-            home2X[i] = pointToPoint(n, i, x);
-        }
+        int[] home2X = dijkstra(adj, n, x);
+        int[] x2Home = dijkstra(reverseAdj, n, x);
 
         int answer = 0;
         for (int i = 1; i <= n; i++) {
@@ -45,15 +40,7 @@ public class Main {
         System.out.println(answer);
     }
 
-    private static int[] pointToAll(int n, int start) {
-        return dijkstra(n, start);
-    }
-
-    private static int pointToPoint(int n, int start, int end) {
-        return dijkstra(n, start)[end];
-    }
-
-    private static int[] dijkstra(int n, int start) {
+    private static int[] dijkstra(List<int[]>[] adj, int n, int start) {
         int[] cost = new int[n + 1];
         Arrays.fill(cost, Integer.MAX_VALUE);
 
