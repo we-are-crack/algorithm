@@ -47,8 +47,7 @@ public class Main {
         }
 
         public void remove(int x) {
-            int temp = (1 << 21) - 1 - (1 << x);
-            bitmask &= temp;
+            bitmask &= ~(1 << x);
         }
 
         public int check(int x) {
@@ -56,9 +55,7 @@ public class Main {
         }
 
         public void toggle(int x) {
-            if (check(x) == 1) {
-                remove(x);
-            } else add(x);
+            bitmask ^= (1 << x);
         }
 
         public void all() {
