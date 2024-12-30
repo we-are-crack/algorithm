@@ -40,30 +40,33 @@ public class Main {
     }
 
     static class S {
-        private boolean[] set = new boolean[21];
+        private int bitmask = 0;
 
         public void add(int x) {
-            set[x] = true;
+            bitmask |= 1 << x;
         }
 
         public void remove(int x) {
-            set[x] = false;
+            int temp = (1 << 21) - 1 - (1 << x);
+            bitmask &= temp;
         }
 
         public int check(int x) {
-            return set[x] ? 1 : 0;
+            return (bitmask & (1 << x)) != 0 ? 1 : 0;
         }
 
         public void toggle(int x) {
-            set[x] = !set[x];
+            if (check(x) == 1) {
+                remove(x);
+            } else add(x);
         }
 
         public void all() {
-            Arrays.fill(set, true);
+            bitmask = (1 << 21) - 1;
         }
 
         public void empty() {
-            Arrays.fill(set, false);
+            bitmask = 0;
         }
     }
 }
