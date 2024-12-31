@@ -26,7 +26,7 @@ public class Main {
                 continue;
             }
 
-            if (compare(selected, score[country]) > 0) {
+            if (compare(score[country], selected) > 0) {
                 rank++;
             }
         }
