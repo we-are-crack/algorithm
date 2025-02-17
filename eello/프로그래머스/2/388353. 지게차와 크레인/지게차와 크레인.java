@@ -50,7 +50,6 @@ class Solution {
     
     private int removeByLift(char target) { // 지게차로 물품 꺼냄
         int rm = 0;
-        List<int[]> ac = new ArrayList<>();
         for (int r = 0; r < n; r++) {
             for (int c = 0; c < m; c++) {
                 if (removed[r][c] || storage[r].charAt(c) != target || !accessible[r][c]) {
@@ -68,7 +67,6 @@ class Solution {
     
     private int removeByCrane(Set<Character> targets) { // 크레인으로 물품 꺼냄
         int rm = 0;
-        List<int[]> ac = new ArrayList<>();
         for (int r = 0; r < n; r++) {
             for (int c = 0; c < m; c++) {
                 if (removed[r][c] || !targets.contains(storage[r].charAt(c))) {
