@@ -24,7 +24,7 @@ public class Main {
 
         int answer = 0;
         while (true) {
-            List<Association> associations = new ArrayList<>();
+            boolean flag = false;
             boolean[][] visit = new boolean[n][n];
             for (int y = 0; y < n; y++) {
                 for (int x = 0; x < n; x++) {
@@ -36,19 +36,17 @@ public class Main {
                     unite(association, visit, y, x);
 
                     if (association.getJoinedCountryCount() > 1) {
-                        associations.add(association);
+                        flag = true;
+                        association.move();
                     }
                 }
             }
-
-            if (associations.isEmpty()) {
+            
+            if (!flag) {
                 break;
             }
 
             answer++;
-            for (Association association : associations) {
-                association.move();
-            }
         }
         
         System.out.println(answer);
