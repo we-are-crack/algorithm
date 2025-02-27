@@ -55,7 +55,6 @@ public class Main {
                 continue;
             }
 
-            int tempS = square[r / 3][c / 3], tempR = row[r], tempC = col[c];
             board[r][c] = n;
             square[r / 3][c / 3] |= 1 << n;
             row[r] |= 1 << n;
@@ -63,9 +62,9 @@ public class Main {
 
             sudoku(idx + 1);
 
-            square[r/3][c/3] = tempS;
-            row[r] = tempR;
-            col[c] = tempC;
+            square[r / 3][c / 3] ^= 1 << n;
+            row[r] ^= 1 << n;
+            col[c] ^= 1 << n;
         }
     }
 
