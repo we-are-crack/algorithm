@@ -13,27 +13,36 @@ public class Main {
         int m = Integer.parseInt(st.nextToken());
 
         st = new StringTokenizer(br.readLine());
-        Integer[] trees = new Integer[n + 1];
+        Integer[] trees = new Integer[n];
+        int maxHeight = 0;
         for (int i = 0; i < n; i++) {
             trees[i] = Integer.parseInt(st.nextToken());
+            maxHeight = Math.max(maxHeight, trees[i]);
         }
-        trees[n] = 0;
 
-        Arrays.sort(trees, Comparator.reverseOrder());
+        int minHeight = 0;
+        while (maxHeight >= minHeight) {
+            int cutHeight = (maxHeight + minHeight) / 2;
+            long totalCutHeight = cut(trees, cutHeight);
 
-        int cutTreeCnt = 1;
-        int cutHeight = trees[0];
-        int totalCutTreeHeight = 0;
-        for (int i = 0; i < n; i++) {
-            long nextCuttingHeight = trees[i] - trees[i + 1];
-            if (nextCuttingHeight * cutTreeCnt >= (m - totalCutTreeHeight)) {
-                System.out.println(cutHeight - ((int) Math.ceil((m - totalCutTreeHeight) / (double) cutTreeCnt)));
-                break;
+            if (totalCutHeight >= m) {
+                minHeight = cutHeight + 1;
+            } else {
+                maxHeight = cutHeight - 1;
             }
-
-            totalCutTreeHeight += nextCuttingHeight * cutTreeCnt;
-            cutHeight -= nextCuttingHeight;
-            cutTreeCnt++;
         }
+
+        System.out.println(maxHeight);
+    }
+
+    private static long cut(Integer[] trees, int cutHeight) {
+        long total = 0;
+        for (Integer tree : trees) {
+            if (tree - cutHeight > 0) {
+                total += tree - cutHeight;
+            }
+        }
+
+        return total;
     }
 }
