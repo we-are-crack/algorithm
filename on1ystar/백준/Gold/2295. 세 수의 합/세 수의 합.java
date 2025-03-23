@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Main {
@@ -16,14 +17,15 @@ public class Main {
 
         Arrays.sort(arr);
 
-        List<Long> sumTwoNum = new ArrayList<>();
+        long[] sumTwoNum = new long[n * (n - 1) / 2];
+        int idx = 0;
         for (int i = 0; i < n - 1; i++) {
             for (int j = i; j < n - 1; j++) {
-                sumTwoNum.add((long) arr[i] + arr[j]);
+                sumTwoNum[idx++] = ((long) arr[i] + arr[j]);
             }
         }
 
-        Collections.sort(sumTwoNum);
+        Arrays.sort(sumTwoNum);
 
         for (int i = n - 1; i >= 1; i--) {
             for (int j = 0; j < i; j++) {
@@ -36,15 +38,15 @@ public class Main {
         }
     }
 
-    private static boolean bs(List<Long> sumTwoNum, int target) {
+    private static boolean bs(long[] sumTwoNum, int target) {
         int start = 0;
-        int end = sumTwoNum.size() - 1;
+        int end = sumTwoNum.length - 1;
 
         while (start <= end) {
             int mid = (start + end) / 2;
-            if (sumTwoNum.get(mid) < target) {
+            if (sumTwoNum[mid] < target) {
                 start = mid + 1;
-            } else if (sumTwoNum.get(mid) > target) {
+            } else if (sumTwoNum[mid] > target) {
                 end = mid - 1;
             } else {
                 return true;
