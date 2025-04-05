@@ -1,64 +1,54 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
 
 public class Main {
 
-    private static int n;
-    private static final int[] direction = {0, 1, -1};
-    private static int answer = 0;
+    private static int n, answer;
+    private static int[] dr = {1, 1, 1};
+    private static int[] dc = {1, 0, -1};
+    private static int[][] board;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         n = Integer.parseInt(br.readLine());
+        board = new int[n][n];
 
-        int[] queens = new int[n];
-        int[][] board = new int[n][n];
-        for (int i = 0; i < n; i++) {
-            queens[0] = i;
-            solve(queens, board, 1);
-        }
-
+        solve(0);
         System.out.println(answer);
     }
 
-    private static void solve(int[] queens, int[][] board, int queenCount) {
-        if (queenCount == n) {
+    private static void solve(int r) {
+        if (r == n) {
             answer++;
             return;
         }
 
-        addQueen(queens, board, queenCount);
-
-        for (int i = 0; i < n; i++) {
-            if (board[queenCount][i] == 0) {
-                queens[queenCount] = i;
-                solve(queens, board, queenCount + 1);
-            }
-        }
-
-        removeQueen(queens, board, queenCount);
-    }
-
-    private static void calculateBoard(int[] queens, int[][] board, int queenCount, boolean isAdding) {
-        for (int i = 0; i < queenCount; i++) {
-            for (int d = 0; d < 3; d++) {
-                int pos = queens[i] + (direction[d] * (queenCount - i));
-
-                if (0 <= pos && pos < n) {
-                    if (isAdding) {
-                        board[queenCount][pos]++;
-                    } else {
-                        board[queenCount][pos]--;
-                    }
-                }
+        for (int j = 0; j < n; j++) {
+            if (board[r][j] == 0) {
+                checkingBoard(r, j, 1);
+                solve(r + 1);
+                checkingBoard(r, j, -1);
             }
         }
     }
 
-    private static void addQueen(int[] queens, int[][] board, int queenCount) {
-        calculateBoard(queens, board, queenCount, true);
+    private static void checkingBoard(int r, int c, int setting) {
+        for (int i = 0; i < 3; i++) {
+            int j = 2;
+            int nextR = r + dr[i];
+            int nextC = c + dc[i];
+
+            while (valid(nextR, nextC)) {
+                board[nextR][nextC] += setting;
+                nextR = r + dr[i] * j;
+                nextC = c + dc[i] * j;
+                j++;
+            }
+        }
     }
 
-    private static void removeQueen(int[] queens, int[][] board, int queenCount) {
-        calculateBoard(queens, board, queenCount, false);
+    private static boolean valid(int r, int c) {
+        return 0 <= r && r < n && 0 <= c && c < n;
     }
 }
