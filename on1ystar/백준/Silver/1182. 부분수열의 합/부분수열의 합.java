@@ -1,5 +1,7 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.StringTokenizer;
 
 public class Main {
 
@@ -18,20 +20,20 @@ public class Main {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        for (int i = 0; i < n; i++) {
-            solve(i + 1, arr[i]);
-        }
-
+        find(0, 0);
         System.out.println(answer);
     }
 
-    private static void solve(int nowIdx, int sum) {
-        if (sum == s) {
-            answer++;
+    private static void find(int pos, int sum) {
+        if (pos == n) {
+            return;
         }
 
-        for (int i = nowIdx; i < n; i++) {
-            solve(i + 1, sum + arr[i]);
+        for (int i = pos; i < n; i++) {
+            if (sum + arr[i] == s) {
+                answer++;
+            }
+            find(i + 1, sum + arr[i]);
         }
     }
 }
