@@ -20,7 +20,7 @@ class Solution {
             int[] other = new int[sel.length];
             int otherBitmask = 0, oi = 0;
             for (int d = 1; d <= dice.length; d++) {
-                if (selected(sel, d)) {
+                if (isSelected(sel, d)) {
                     continue;
                 }
                 
@@ -33,10 +33,9 @@ class Solution {
             
             Dice d1 = getDice(dice, sel);
             Dice d2 = getDice(dice, other);
-            
             Dice win = d1.vs(d2);
             
-            if (answer == null || answer.winRate < win.winRate) {
+            if (answer == null || answer.win < win.win) {
                 answer = win;
             }
             
@@ -64,7 +63,7 @@ class Solution {
         return d;
     }
     
-    private boolean selected(int[] sel, int num) {
+    private boolean isSelected(int[] sel, int num) {
         for (int s : sel) {
             if (s == num) {
                 return true;
@@ -77,14 +76,12 @@ class Solution {
     private static class Dice {
         private int[] ids;
         private Map<Integer, Integer> allCase = new HashMap<>(); // key = 조합된 수, value = 개수
-        private int[] count = new int[501]; // 누적합
+        private int[] count; // 누적합
         private int win;
-        private int draw;
-        private int lose;
-        private double winRate;
         
         public Dice(int... ids) {
             this.ids = Arrays.copyOf(ids, ids.length);
+            count = new int[ids.length * 100 + 1];
             Arrays.sort(ids);
         }
         
@@ -116,40 +113,23 @@ class Solution {
         }
         
         public Dice vs(Dice other) {
-            int w = 0, d = 0, l = 0;
+            int w = 0, l = 0;
             for (Map.Entry<Integer, Integer> entry : allCase.entrySet()) {
                 int key = entry.getKey();
                 int val = entry.getValue();
                 
                 w += other.count[key - 1] * val;
-                d += (other.count[key] - other.count[key - 1]) * val;
                 l += (other.count[other.count.length - 1] - other.count[key]) * val;
             }
             
-            setResult(w, d, l);
-            other.setResult(l, d, w);
+            setWin(w);
+            other.setWin(l);
             
-            return winRate > other.winRate ? this : other;
+            return win > other.win ? this : other;
         }
         
-        private void setResult(int win, int draw, int lose) {
+        private void setWin(int win) {
             this.win = win;
-            this.draw = draw;
-            this.lose = lose;
-            this.winRate = win / (double) (win + draw + lose);
-        }
-        
-        @Override
-        public String toString() {
-            StringBuilder sb = new StringBuilder();
-            sb.append(Arrays.toString(ids))
-                .append(": total= ").append(win + draw + lose)
-                .append(", win= ").append(win)
-                .append(", draw= ").append(draw)
-                .append(", lose= ").append(lose)
-                .append(", winRate= ").append(winRate);
-            
-            return sb.toString();
         }
     }
 }
