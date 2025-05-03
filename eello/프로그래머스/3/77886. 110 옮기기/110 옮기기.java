@@ -1,3 +1,5 @@
+import java.util.*;
+
 class Solution {
     
     public String[] solution(String[] s) {
@@ -10,17 +12,28 @@ class Solution {
     }
     
     private String transform(String str) {
-        StringBuilder sb = new StringBuilder(str);
-        
-        int i = 0, count = 0;
-        while (i < str.length() - 2) {
-            if (isTarget(sb, i, "110")) {
-                sb.replace(i, i + 3, "");
-                count++;
-                i = Math.max(0, i - 2);
-            } else {
-                i++;
+        int count = 0;
+        Deque<Character> stack = new ArrayDeque<>();
+        for (char ch : str.toCharArray()) {
+            if (stack.size() >= 2 && ch == '0') {
+                char p = stack.pop();
+                char pp = stack.pop();
+                
+                if (p == '1' && pp == '1') {
+                    count++;
+                    continue;
+                }
+                
+                stack.push(pp);
+                stack.push(p);
             }
+            
+            stack.push(ch);
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        while (!stack.isEmpty()) {
+            sb.append(stack.pollLast());
         }
         
         String insert = "110".repeat(count);
