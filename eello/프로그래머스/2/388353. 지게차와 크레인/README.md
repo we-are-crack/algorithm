@@ -1,10 +1,10 @@
 # [level 2] 지게차와 크레인 - 388353 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/388353?language=java) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/388353) 
 
 ### 성능 요약
 
-메모리: 76.7 MB, 시간: 24.55 ms
+메모리: 86.1 MB, 시간: 10.91 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 02월 17일 16:25:48
+2025년 12월 24일 11:24:45
 
 ### 문제 설명
 
