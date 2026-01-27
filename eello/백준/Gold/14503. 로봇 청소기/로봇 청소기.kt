@@ -1,80 +1,96 @@
-val dir = arrayOf(
-    intArrayOf(-1, 0), // N
-    intArrayOf(0, 1), // E
-    intArrayOf(1, 0), // S
-    intArrayOf(0, -1) // W
-)
+import java.util.StringTokenizer
 
-class Cleaner(var position: IntArray, var head: Int) {
+enum class Direction(val r: Int, val c: Int) {
+    North(-1, 0),
+    East(0, 1),
+    South(1, 0),
+    West(0, -1),
+    ;
 
-    var cleanArea = 0
+    fun rotateLeft(): Direction = from((this.ordinal + 3) % 4)
+    fun backward(): Direction = from((this.ordinal + 2) % 4)
 
-    fun clean() {
-        cleanArea += 1
-    }
-
-    fun moveTo(r: Int, c: Int) {
-        position[0] = r
-        position[1] = c
+    companion object {
+        fun from(value: Int) = entries[value]
     }
 }
 
-/**
- * 4방향에 청소되지 않은 빈 칸이 존재하는지 확인
- *
- * 청소되지 않은 빈 칸이 존재하면 `true` 리턴
- * 존재하지 않으면 `false` 리턴
- */
-fun Cleaner.scan(map: Array<IntArray>): Boolean {
-    for (d in dir) {
-        val nr = position[0] + d[0]
-        val nc = position[1] + d[1]
+data class Point(val r: Int, val c: Int) {
+    operator fun plus(dir: Direction) = Point(r + dir.r, c + dir.c)
+}
 
-        if (map[nr][nc] == 0) {
-            return true
-        }
+class Cleaner(
+    initialPos: Point,
+    initialHead: Direction,
+) {
+    var pos = initialPos
+    private set
+
+    var head = initialHead
+    private set
+
+    var cleanCount: Int = 0
+    private set
+
+    fun clean() {
+        cleanCount++
     }
 
-    return false
+    fun turnAndMove(nextHead: Direction, nextPoint: Point) {
+        head = nextHead
+        pos = nextPoint
+    }
 }
 
 fun Cleaner.operate(map: Array<IntArray>) {
     while (true) {
-        val (r, c) = position
-
-        if (map[r][c] == 0) {
+        if (map[pos.r][pos.c] == 0) {
+            map[pos.r][pos.c] = -1
             clean()
-            map[r][c] = -1
         }
 
-        if (scan(map)) {
-            head = (head + 3) % 4
+        val hasUncleanedArea = Direction.entries.any { dir ->
+            val next = pos + dir
+            map[next.r][next.c] == 0
+        }
 
-            val nr = r + dir[head][0]
-            val nc = c + dir[head][1]
-            if (map[nr][nc] == 0) {
-                moveTo(nr, nc)
+        if (hasUncleanedArea) {
+            val nextHead = head.rotateLeft()
+            val nextPoint = pos + nextHead
+
+            if (map[nextPoint.r][nextPoint.c] == 0) {
+                turnAndMove(nextHead, nextPoint)
+            } else {
+                turnAndMove(nextHead, pos)
             }
         } else {
-            val bd = (head + 2) % 4
-            val br = r + dir[bd][0]
-            val bc = c + dir[bd][1]
+            val backPoint = pos + head.backward()
 
-            if (map[br][bc] == 1) {
-                return
+            if (map[backPoint.r][backPoint.c] == 1) {
+                break
             }
 
-            moveTo(br, bc)
+            turnAndMove(head, backPoint)
         }
     }
 }
 
 fun main() {
-    val (n, m) = readln().split(" ").map { it.toInt() }
-    val (r, c, d) = readln().split(" ").map { it.toInt() }
-    val map = Array(n) { readln().split(" ").map { it.toInt() }.toIntArray() }
+    val st1 = StringTokenizer(readln())
+    val n = st1.nextToken().toInt()
+    val m = st1.nextToken().toInt()
 
-    val cleaner = Cleaner(intArrayOf(r, c), d)
+    val st2 = StringTokenizer(readln())
+    val r = st2.nextToken().toInt()
+    val c = st2.nextToken().toInt()
+    val d = st2.nextToken().toInt()
+
+    val map = Array(n) {
+        val st = StringTokenizer(readln())
+        IntArray(m) { st.nextToken().toInt() }
+    }
+
+    val cleaner = Cleaner(Point(r, c), Direction.from(d))
     cleaner.operate(map)
-    print(cleaner.cleanArea)
+    print(cleaner.cleanCount)
 }
