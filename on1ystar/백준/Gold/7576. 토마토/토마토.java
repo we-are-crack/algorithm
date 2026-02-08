@@ -38,7 +38,7 @@ public class Main {
 
         int days = 0;
         while (!ripeTomatoes.isEmpty()) {
-            ripeTomatoes = pastOneDay(ripeTomatoes, box);
+            pastOneDay(ripeTomatoes, box);
             days++;
             unripeTomatoCount -= ripeTomatoes.size();
         }
@@ -54,24 +54,21 @@ public class Main {
         return 0 <= r && r < n && 0 <= c && c < m;
     }
 
-    private static Queue<int[]> pastOneDay(Queue<int[]> ripeTomatoes, int[][] box) {
-        Queue<int[]> nextRipeTomatoes = new LinkedList<>();
-
-        while (!ripeTomatoes.isEmpty()) {
+    private static void pastOneDay(Queue<int[]> ripeTomatoes, int[][] box) {
+        int ripeTomatoCount = ripeTomatoes.size();
+        
+        for (int i = 0; i < ripeTomatoCount; i++) {
             int[] tomato = ripeTomatoes.poll();
 
-            for (int i = 0; i < 4; i++) {
-                int r = tomato[0] + dr[i];
-                int c = tomato[1] + dc[i];
+            for (int d = 0; d < 4; d++) {
+                int r = tomato[0] + dr[d];
+                int c = tomato[1] + dc[d];
 
                 if (validPosition(r, c) && box[r][c] == 0) {
                     box[r][c] = 1;
-                    nextRipeTomatoes.offer(new int[]{r, c});
+                    ripeTomatoes.offer(new int[]{r, c});
                 }
             }
-
         }
-
-        return nextRipeTomatoes;
     }
 }
