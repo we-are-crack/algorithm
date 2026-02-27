@@ -32,7 +32,7 @@ private class DiscSystem(val n: Int, val m: Int, initState: Array<IntArray>) {
     val avg get() = sum.toDouble() / count
 
     private val discs = Array(n + 1) { r ->
-        val disc = Disc()
+        val disc = Disc(m)
         if (r > 0) {
             initState[r - 1].forEach { num ->
                 disc.addNumber(num)
@@ -139,34 +139,32 @@ private class DiscSystem(val n: Int, val m: Int, initState: Array<IntArray>) {
         }
     }
 
-    class Disc() {
+    class Disc(val capacity: Int) {
 
-        // 0번째 인덱스가 12시 기준, 삭제된 숫자 = 0
-        private val nums = ArrayDeque<Int>()
+        private val nums = IntArray(capacity) { 0 }
+        private var size = 0
+        private var pointer = 0 // 항상 원판의 12시 방향(첫번째 숫자)을 가리키는 인덱스
 
         operator fun set(index: Int, value: Int) {
-            nums[index] = value
+            nums[toInternalIndex(index)] = value
         }
 
-        operator fun get(index: Int): Int = nums[index]
+        operator fun get(index: Int): Int = nums[toInternalIndex(index)]
+
+        private fun toInternalIndex(index: Int): Int {
+            return (pointer + index) % capacity
+        }
 
         fun addNumber(num: Int) {
-            nums.addLast(num)
+            nums[size++] = num
         }
 
         fun rotate(d: Int, k: Int) {
-            when (d) {
-                0 -> rotateClockwise(k)
-                1 -> rotateCounterClockwise(k)
+            pointer = when (d) {
+                0 -> (pointer - k + capacity) % capacity // 시계방향 회전
+                1 -> (pointer + k) % capacity // 반시계방향 회전
+                else -> throw IllegalArgumentException()
             }
-        }
-
-        private fun rotateClockwise(k: Int) { // 시계 방향 회전
-            repeat(k) { nums.addFirst(nums.removeLast()) }
-        }
-
-        private fun rotateCounterClockwise(k: Int) { // 반시계 방향 회전
-            repeat(k) { nums.addLast(nums.removeFirst()) }
         }
     }
 }
