@@ -73,10 +73,5 @@ class Solution {
             this.playTime -= time;
             return playTime <= 0;
         }
-        
-        @Override
-        public String toString() {
-            return "Plan(subject= " + subject +")";
-        }
     }
 }
